@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Boost REQUIRED)
+find_dependency(Volk REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/gnuradio-pmtTargets.cmake")
