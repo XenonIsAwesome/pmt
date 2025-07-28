@@ -11,28 +11,19 @@ add_library(
         ${CMAKE_CURRENT_SOURCE_DIR}/pmt_io.cc ${CMAKE_CURRENT_SOURCE_DIR}/pmt_pool.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/pmt_serialize.cc)
 
-find_package(Volk QUIET)
-if (Volk_FOUND)
-else()
-    message(STATUS "Fetching Volk")
-
-    set(ENABLE_VOLK_PYTHON OFF CACHE BOOL "" FORCE)
-
-    include(FetchContent)
-    FetchContent_Declare(
-        Volk
-        GIT_SUBMODULES_RECURSE TRUE
-        GIT_REPOSITORY https://github.com/gnuradio/volk.git
-    )
-    FetchContent_MakeAvailable(Volk)
-endif(Volk_FOUND)
-
+########################################################################
+# Find dependencies
+########################################################################
+find_package(Volk REQUIRED)
 find_package(Boost REQUIRED)
 
+########################################################################
+# Linking dependencies
+########################################################################
 target_link_libraries(
     gnuradio-pmt
     PUBLIC Boost::boost
-    PUBLIC Volk::volk)
+    PRIVATE volk)
 
 target_include_directories(
         gnuradio-pmt
@@ -40,5 +31,4 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/)
 
-install(TARGETS gnuradio-pmt
-        LIBRARY DESTINATION lib)
+install(TARGETS gnuradio-pmt LIBRARY DESTINATION lib)
